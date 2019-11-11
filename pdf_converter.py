@@ -22,20 +22,25 @@ def process_xml_data(input_filepath, output_filepath):
 	pages = tree.findall("page")
 	page_dimension = get_page_dimension(pages[0])
 	# save_as_docx(pages, output_filepath)
-	data = get_scores(pages)[0]
-	ind = get_lowest_top(data)
-	print(json.dumps(data, indent = 4))
-	print("initial length>> {}".format(len(data)))
-	data, new_data = recurssive_data_collection(data, ind, [])
-	print("initial new_data length>> {}".format(len(new_data)))
-	while data:
-		print("Recurssive")
+	page_data = get_scores(pages)
+	overall_data = {}
+	for pg_id, data in page_data.items():
+		if not data:
+			continue
 		ind = get_lowest_top(data)
-		print("ind>> ", ind)
-		data, new_data = recurssive_data_collection(data, ind, new_data)
-		print("Recurssive data length>> {}".format(len(data)))
-		print("Recurssive new_data length>> {}".format(len(new_data)))
-	save_as_docx_2(new_data, output_filepath)
+		print(json.dumps(data, indent = 4))
+		print("initial length>> {}".format(len(data)))
+		data, new_data = recurssive_data_collection(data, ind, [])
+		print("initial new_data length>> {}".format(len(new_data)))
+		while data:
+			print("Recurssive")
+			ind = get_lowest_top(data)
+			print("ind>> ", ind)
+			data, new_data = recurssive_data_collection(data, ind, new_data)
+			print("Recurssive data length>> {}".format(len(data)))
+			print("Recurssive new_data length>> {}".format(len(new_data)))
+		overall_data[pg_id]	= new_data
+	save_as_docx_2(overall_data, output_filepath)
 
 def recurssive_data_collection(data, ind, new_data = []):
 	# new_data = []
@@ -55,13 +60,19 @@ def recurssive_data_collection(data, ind, new_data = []):
 		data = data[:ind] + data[last_index+1:]	
 	except:
 		print("-")
-		import pdb; pdb.set_trace()
 	return data, new_data
 
 def get_lowest_top(data):
 	temp = [i[0] for i in data]
 	min_top = min(temp)
-	ind = temp.index(min_top)
+	ind = temp.index(min_top)	
+	
+	for i, each in enumerate(data):
+		if abs(min_top - each[0]) <= 5 and each[1] < data[ind][1]:
+		# if each[1] < data[ind][1]:
+			ind = i
+			break 
+	
 	return ind
 
 def save_as_docx(pages, output_filepath):
@@ -76,25 +87,44 @@ def save_as_docx(pages, output_filepath):
 
 def save_as_docx_2(data, output_filepath):
 	""" Saves the given data as docx formated file. """
-	data_to_dump = ""
-	last_height = 0
-	for ind, each in enumerate(data):
-		if not each[-1]:
-			each[-1] = ""
-			continue
-		if last_height == each[3]:
-			data_to_dump += " " + each[-1]
-			continue
-		elif last_height != each[3]:
-			# document.add_paragraph(data_to_dump)		
-			data_to_dump += "\n" + each[-1]
-		# else:		
-		# data_to_dump = each[-1]
-		last_height = each[3]
-		# data_to_dump += each[-1]
-		print("last_height> ", last_height)
-	document.add_paragraph(data_to_dump)
 	# data_to_dump = ""
+	last_height = 0
+	max_pages = max(data.keys()) + 1
+
+	for i in range(0, max_pages):
+		data_to_dump = ""
+		for ind, each in enumerate(data.get(i, [])):
+			if not each[-1]:
+				each[-1] = ""
+				continue
+			if last_height == each[3]:
+				# data_to_dump += " " + each[-1]
+				data_to_dump += "\n" + each[-1]
+				continue
+			elif last_height != each[3]:
+				# document.add_paragraph(data_to_dump)		
+				data_to_dump += "\n" + each[-1]
+			last_height = each[3]
+		document.add_paragraph(data_to_dump)
+		document.add_page_break()
+
+	# for ind, each in enumerate(data):
+	# 	if not each[-1]:
+	# 		each[-1] = ""
+	# 		continue
+	# 	if last_height == each[3]:
+	# 		data_to_dump += " " + each[-1]
+	# 		continue
+	# 	elif last_height != each[3]:
+	# 		# document.add_paragraph(data_to_dump)		
+	# 		data_to_dump += "\n" + each[-1]
+	# 	# else:		
+	# 	# data_to_dump = each[-1]
+	# 	last_height = each[3]
+	# 	# data_to_dump += each[-1]
+	# 	print("last_height> ", last_height)
+	# document.add_paragraph(data_to_dump)
+	# # data_to_dump = ""
 	document.add_page_break()
 	document.save(output_filepath)
 
@@ -117,7 +147,6 @@ def get_scores(pages):
 			temp = []
 			if each.tag == "fontspec":
 				continue
-			# import pdb; pdb.set_trace()
 			temp = [int(i) for i in each.values()[0:4]]
 			txt = ""
 			for tt in each.itertext():
@@ -136,9 +165,9 @@ def convert_to_xml(input_filepath, output_filepath):
 		assert("Parsing Error")
 
 if __name__ == "__main__":
-	input_filepath = "/home/box/Workshop/training/libin/pdfExtractor/data/sample_283.pdf"
-	output_filepath = "/home/box/Workshop/training/libin/pdfExtractor/data/sample_283.xml"
+	input_filepath = "/home/box/Workshop/training/libin/pdfExtractor/data/Code_of_Conduct.pdf"
+	output_filepath = "/home/box/Workshop/training/libin/pdfExtractor/data/Code_of_Conduct.xml"
 	convert_to_xml(input_filepath, output_filepath)
-	input_filepath = "/home/box/Workshop/training/libin/pdfExtractor/data/sample_283.xml"
-	output_filepath = "/home/box/Workshop/training/libin/pdfExtractor/data/sample_283.docx"
+	input_filepath = "/home/box/Workshop/training/libin/pdfExtractor/data/Code_of_Conduct.xml"
+	output_filepath = "/home/box/Workshop/training/libin/pdfExtractor/data/Code_of_Conduct.docx"
 	process_xml_data(input_filepath, output_filepath)
