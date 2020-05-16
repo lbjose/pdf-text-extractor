@@ -1,7 +1,7 @@
 # pdfExtractor
-Trying to extract the pdf data using pdf2text inbuilt function available in Ubuntu. 
+pdfExtractor aims at extracting the data from pdf using the pdf2text inbuilt function available in Ubuntu. 
 
-The pdf is converted to XML and XML parser is then used to convert the data to docx format. 
+The pdf is converted to XML and XML parser is then used to convert the data to docx format.
 
 Complex pdf structure is converted to a normal pdf format that can be used for further processing and analysis.
 
