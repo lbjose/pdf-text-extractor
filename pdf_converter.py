@@ -171,3 +171,4 @@ if __name__ == "__main__":
 	input_filepath = "/home/box/Workshop/training/libin/pdfExtractor/data/Code_of_Conduct.xml"
 	output_filepath = "/home/box/Workshop/training/libin/pdfExtractor/data/Code_of_Conduct.docx"
 	process_xml_data(input_filepath, output_filepath)
+	print("Done")
