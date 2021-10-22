@@ -1,9 +1,10 @@
-# pdf_data_extractor
-pdfExtractor aims at extracting the data from pdf using the pdf2text inbuilt function available in Ubuntu. 
+# pdf-text-extractor
+pdf-text-extractor aims at extracting the data from pdf using the pdf2text Poppler available in Ubuntu. 
 
-The pdf is converted to XML and XML parser is then used to convert the data to docx format.
-
-Complex pdf structure is converted to a normal pdf format that can be used for further processing and analysis.
+The pdf is converted to XML and XML parser is then used to output the data as:
+ - docx file
+ - json file
+ - python list
 
 XML Parser Links
 https://pypi.org/project/lxml/
