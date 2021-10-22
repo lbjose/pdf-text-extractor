@@ -13,3 +13,7 @@ https://lxml.de
 
 Python version >= 3.5. Creating virtual env recommended.
 Requirement file is added. Run the command pip install -r requirements.txt.
+
+Also, install Poppler Utils.
+sudo apt update
+sudo apt install poppler-utils
