@@ -1,4 +1,4 @@
-**pdf-text-extractor**<br>
+# **pdf-text-extractor**<br>
 
 **pdf-text-extractor** aims at extracting data from pdf using the pdf2text (Poppler) available in Ubuntu. 
 
