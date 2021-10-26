@@ -141,7 +141,6 @@ if __name__ == "__main__":
     xml_output_path = f"{path}/convert.xml" if path else "convert.xml"
     convert_to_xml(input_path, xml_output_path)
     data = process_xml_data(xml_output_path)
-    if output_path or True:
-        output_path = f"{output_path}/convert.json" if output_path else "convert.json"
-        with open(output_path, "w") as fw:
-            json.dump(data, fw, indent=4)
+    output_path = f"{output_path}/convert.json" if output_path else "convert.json"
+    with open(output_path, "w") as fw:
+        json.dump(data, fw, indent=4)
