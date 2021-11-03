@@ -6,7 +6,9 @@ This is mainly intended for extracting data from text based pdf with two or thre
 We use pdf2text to extract content with xml as output file and then parsing that XML file to collect the content line by line.<br>
 
 Run using the following command:<br>
-`python pdf_converter.py --input_path input_file_path --output_path output_file_path`
+```
+python pdf_converter.py --input_path input_file_path --output_path output_file_path
+```
  
 For further reading about **XML Parser**<br>
 https://pypi.org/project/lxml/<br>
